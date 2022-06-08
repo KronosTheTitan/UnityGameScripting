@@ -6,14 +6,13 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     
-    protected float health = 1;
-    protected float lastAttack = 0;
+    [SerializeField] protected float health = 1;
+    protected float lastAttack = -10;
     /// <summary>
     /// This method makes a melee attack
     /// </summary>
     public virtual void RangedAttack()
     {
-        
     }
     /// <summary>
     /// This method is used to make a melee attack against a target.
@@ -23,8 +22,10 @@ public class Character : MonoBehaviour
         
     }
 
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage,Character source)
     {
+        if(source==this) return;
+        Debug.Log("OOF");
         health -= damage;
         if(health<=0) Destroy(gameObject);
     }

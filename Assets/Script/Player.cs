@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,6 +16,7 @@ public class Player : Character
 
     [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask enemyMask;
 
     [SerializeField] private Camera _camera;
 
@@ -55,28 +57,42 @@ public class Player : Character
 
     void MouseControls()
     {
-        if(Input.GetMouseButtonDown(0)) RangedAttack();
+        if(Input.GetMouseButton(0)) RangedAttack();
     }
 
     public override void RangedAttack()
     {
         //some code that checks and updates the requirements for making a ranged attack.
-        if (Time.time < lastAttack + 10) return;
+        if (Time.time < lastAttack + .5f) return;
         Debug.Log("Player shot at : " + Time.time);
         lastAttack = Time.time;
         
         //Raycast to get a potential hit.
-        Ray ray = new Ray(); 
+        Ray ray = new Ray(_camera.transform.position,_camera.transform.forward); 
         RaycastHit hit;
-
-        Physics.Raycast(ray, out hit, 1000f, 100);
         
+        rays.Add(ray);
+
+        Physics.Raycast(ray, out hit, 1000f, enemyMask);
+        
+        if(hit.collider == null) return;
         Character character = hit.collider.gameObject.GetComponent<Character>();
         if(character == null) return;
 
         //resolve the hit.
-        character.TakeDamage(1);
+        character.TakeDamage(1,this);
 
 
+    }
+
+    private List<Ray> rays = new List<Ray>();
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        foreach (Ray ray in rays)
+        {
+            Gizmos.DrawRay(ray);
+        }
     }
 }

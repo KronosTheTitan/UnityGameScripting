@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Imp : Character
+public class Imp : Enemy
 {
-    
+    private void Update()
+    {
+    }
 }
