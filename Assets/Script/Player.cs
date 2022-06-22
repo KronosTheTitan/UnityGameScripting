@@ -23,6 +23,8 @@ public class Player : Character
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private Transform playerBody;
 
+    [SerializeField] private GameObject bulletHole;
+
     private float _xRotation = 0f;
 
     Vector3 _velocity;
@@ -73,11 +75,15 @@ public class Player : Character
         
         rays.Add(ray);
 
-        Physics.Raycast(ray, out hit, 1000f, enemyMask);
+        Physics.Raycast(ray, out hit, 1000f);
         
         if(hit.collider == null) return;
         Character character = hit.collider.gameObject.GetComponent<Character>();
-        if(character == null) return;
+        if (character == null)
+        {
+            GameObject hole = Instantiate(bulletHole,hit.point+new Vector3(0f,0f,-.02f),Quaternion.LookRotation(-hit.normal));
+            return;
+        }
 
         //resolve the hit.
         character.TakeDamage(1,this);

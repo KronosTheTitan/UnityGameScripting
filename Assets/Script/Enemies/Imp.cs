@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Imp : Enemy
+public class Imp
 {
     private void Update()
     {
