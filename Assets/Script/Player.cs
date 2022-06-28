@@ -81,7 +81,7 @@ public class Player : Character
         Character character = hit.collider.gameObject.GetComponent<Character>();
         if (character == null)
         {
-            GameObject hole = Instantiate(bulletHole,hit.point+new Vector3(0f,0f,-.02f),Quaternion.LookRotation(-hit.normal));
+            GameObject hole = Instantiate(bulletHole,hit.point+new Vector3(hit.normal.x*.02f,hit.normal.y*.02f,hit.normal.z*.02f),Quaternion.LookRotation(-hit.normal));
             return;
         }
 
